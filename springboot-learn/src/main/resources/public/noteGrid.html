@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>笔记列表</title>
+<link rel="stylesheet" type="text/css"
+	href="easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="easyui/themes/icon.css">
+<script type="text/javascript" src="easyui/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="easyui/locale/easyui-lang-zh_CN.js"></script>
+	</head>
+	<script type="text/javascript">
+		$(function(){
+
+			$('#notegrid').datagrid({  
+				fit:true,
+				method:'post',
+				url:"/girl/getPage",
+		 	   	loadMsg:'数据加载中,请稍后...',	
+				singleSelect:false,
+				multiSelect:true,
+				checkbox:true,
+				scrollbarSize :0,
+				fitColumns:true,
+				rownumbers:true,
+				selectOnCheck: true,
+				checkOnSelect: true,
+				pagination:true,
+		    	columns:[[
+		    		{ field:'id',checkbox:true},    
+		        	{field:'a',title:'数字大小',align:'center',width:60},
+		        	{field:'b',title:'数字大小加1',align:'center',width:80},
+		        	{field:'c',title:'名称',align:'center',width:80}
+		    	]],onBeforeLoad:function(p){
+		    		//alert(JSON.stringify(p));
+		    	}, 
+		    	onLoadSuccess:function(data){    
+
+				}
+			});
+		})
+		function doSearch(){
+			var number = {};
+			var t = $('#numberId').serializeArray();
+			$.each(t, function() {
+				if(this.value!="")	//去除空值，防止去后台查询空值数据
+					number[this.name] = $.trim(this.value);//去除空格
+			});
+			$('#notegrid').datagrid('load',number);
+		}
+		function upload(){
+			$.messager.progress();
+			$("#uploadFile").form('submit',{
+				url:"/mavendemo/upload/upload1.do",
+				success: function(){
+					$.messager.progress('close');	
+				}
+			})
+		}
+	</script>
+	<body>
+		<form id="numberId">
+			<table>
+			<tr>
+				<td>
+					<input class="easyui-textbox" name="a">
+				</td>
+				<td>
+					<a class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+				</td>
+			</tr>
+			</table>
+		</form>
+		<div style="height:500px">
+		<table id="notegrid"></table>
+		</div>
+	</body>
+	<form method="post" id="uploadFile" enctype="multipart/form-data">
+		<input type="file" name="file">
+		<a class="easyui-linkbutton" iconCls="icon-ok" onclick="upload()">上传</a>
+	</form>
+</html>

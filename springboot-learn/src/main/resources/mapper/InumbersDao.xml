@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stranger.dao.InumbersDao">
+    <select id="selectList" parameterType="java.util.Map" resultType="com.stranger.domain.Numbers">
+        SELECT * FROM `pams`.`nums`
+        <where>
+            <if test="a != null">
+                a=#{a}
+            </if>
+        </where>
+    </select>
+    <select id="getBya" resultType="Numbers">
+        SELECT * FROM `pams`.`nums` t where t.a=#{a}
+    </select>
+
+</mapper>
